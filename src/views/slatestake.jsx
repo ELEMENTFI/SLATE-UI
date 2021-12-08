@@ -494,8 +494,6 @@ const stake = async() => {
 const unstake = async() => {
 
   const algodClient = new algosdk.Algodv2('', 'https://api.testnet.algoexplorer.io', '');
-
-
   let appId1 = 49099237;
   let appId2 = 49098300;
   var amt = document.getElementById("tid2").value; 
@@ -762,10 +760,6 @@ const Claimreward = async() => {
     suggestedParams: params, 
     appIndex: appId2, 
     appArgs: appArgs2})
- 
-
-
-
  let appArgs3= [];
   
   appArgs2.push(new Uint8Array(Buffer.from("12")));
