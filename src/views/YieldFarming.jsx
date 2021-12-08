@@ -11,7 +11,7 @@ class YieldFarming extends Component {
         this.setState({ activeTab: tab })
     }
     componentDidMount() {
-        document.getElementById("header-title").innerText = "SLATE";
+        document.getElementById("header-title").innerText = "YieldFarming";
     }
     render() {
         return (<>
