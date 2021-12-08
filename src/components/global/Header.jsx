@@ -1,20 +1,28 @@
 /* global AlgoSigner */
+import MyAlgoConnect from '@randlabs/myalgo-connect';
 import { Container, Button } from "reactstrap"
 import web3 from '../../web3';
 import React, { useState,useEffect } from "react";
 import Popup from "../../Popup";
 import Modald from "../../ModalD";
 import FolowStepsd from "../../FolowStepsd";
-//import ModalList from "../../components/ModalList";
+import ModalList from "../../components/ModalList";
 
-// import styles from "./ConnectWallet.module.sass";
+import styles from "../../components/ConnectWallet.module.sass";
 
-// import FolowStepsList from "../../components/FolowStepList";
+import FolowStepsList from "../../components/FolowStepList";
 
-// import ModaldConnect from "../ModalDConnect";
-// import FolowStepsdConnect from "../FolowStepsdConnect";
+import ModaldConnect from "../ModalDConnect";
+import FolowStepsdConnect from "../FolowStepsdConnect";
 
 //window.wallet="";
+const algosdk = require('algosdk');
+const { MyAlgoWallet } = require('@randlabs/myalgo-connect');
+//import MyAlgoConnect from '@randlabs/myalgo-connect';
+//const myAlgoWallet = new MyAlgoConnect();
+const algodClient = new algosdk.Algodv2('', 'https://api.testnet.algoexplorer.io', '');
+const myAlgoConnect = new MyAlgoConnect();
+
 const Header = (props) => {
     const [isListtry, setisListtry] = useState([]);
     const [isOpenlisttry, setIsOpenlisttry] = useState(false);    
@@ -22,7 +30,7 @@ const Header = (props) => {
     const [isOpen, setIsOpen] = useState(false);
     const[dis,setDis] = useState("");
    
-    const Connectwallet=async()=>{                          
+    const Connectalgosigner=async()=>{                          
         AlgoSigner.connect()
         .then((d) => {
         AlgoSigner.accounts({
@@ -47,10 +55,24 @@ const Header = (props) => {
                 
            
             }
+    const Connectwallet = async () => {
+      try {
+        const myAlgoConnect = new MyAlgoConnect();
+        const accountswall = await myAlgoConnect.connect();
+        const addresseswall = accountswall.map(accountswall => accountswall.address);
 
-            const Disconnect=()=>{            
-        
-        
+        console.log("listaccount",accountswall)
+             localStorage.setItem("wallet",accountswall[0].address)
+             //window.location.reload();
+              setisListtry(accountswall)
+              setIsOpenlisttry(true)  
+      }
+      catch (err) {
+          console.error(err);
+      }
+  }
+    const Disconnect=()=>{            
+      
               localStorage.setItem("wallet","")
               window.location.reload()
                
@@ -70,7 +92,7 @@ const Header = (props) => {
                    
                     <h5 className="m-0" id="header-title"></h5>
                     <div className="ml-auto topbar-btns">
-                        <Button color="outline-site-primary">Algorand </Button>
+                      <Button color="outline-site-primary" onClick={Connectalgosigner}>Algorand </Button>
                         {
                             localStorage.getItem("wallet")===null || localStorage.getItem("wallet")==="" ||localStorage.getItem("wallet")==='undefined' ||localStorage.getItem("wallet")===undefined ?  
                             (<Button color="site-primary" className="ml-4"onClick={Connectwallet}>Connect Wallet</Button>):(
@@ -85,7 +107,7 @@ const Header = (props) => {
                 </div>
             </Container>
         </div>
-        {/* <ModalList visible={isOpenlisttry} >
+        <ModalList visible={isOpenlisttry} >
         <FolowStepsList className={styles.steps} data={isListtry} datas={(a)=>
         {
           setisListtrys(a)
@@ -94,7 +116,7 @@ const Header = (props) => {
           localStorage.setItem("net","testnet")
         }
         }/>          
-    </ModalList> */}
+    </ModalList>
     </>);
 }
 

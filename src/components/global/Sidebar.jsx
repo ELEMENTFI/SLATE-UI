@@ -50,7 +50,7 @@ const Sidebar = (props) => {
                
                 <Link to="/yield-farming" className={`theme-nav-item ${history.location.pathname == "/yield-farming" ? "active" : ""}`}>
                     <i className="fa fa-tractor"></i>
-                    <span className="ml-3">Yield Farming</span>
+                    <span className="ml-3">Staking</span>
                 </Link>
                 
                
