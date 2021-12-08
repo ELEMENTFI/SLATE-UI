@@ -494,6 +494,8 @@ const stake = async() => {
 const unstake = async() => {
 
   const algodClient = new algosdk.Algodv2('', 'https://api.testnet.algoexplorer.io', '');
+
+
   let appId1 = 49099237;
   let appId2 = 49098300;
   var amt = document.getElementById("tid2").value; 
@@ -760,6 +762,10 @@ const Claimreward = async() => {
     suggestedParams: params, 
     appIndex: appId2, 
     appArgs: appArgs2})
+ 
+
+
+
  let appArgs3= [];
   
   appArgs2.push(new Uint8Array(Buffer.from("12")));
@@ -812,7 +818,7 @@ const groupID = algosdk.computeGroupID([ transaction1, transaction2, transaction
       txs[1].group = groupID;
       txs[2].group = groupID;
       txs[3].group = groupID;
-	  txs[4].group = groupID;
+	    txs[4].group = groupID;
       
       const signedTx1 = await myAlgoConnect.signTransaction(txs[0].toByte());
       const signedTx2 = await myAlgoConnect.signTransaction(txs[1].toByte());
@@ -1030,19 +1036,20 @@ catch (err) {
                                     <Row className="justify-content-center">
                                         <Col xl="9">
                                             <Row className="mt-6">
-                                                <Col xl="4" md="12" className='mt-3 mt-xl-0'>
-                                                    <Button color="outline-site-primary" block onClick={Claimreward} >claim reward</Button>
-                                                </Col>
-                                                <Col xl="4" md="12" className='mt-3 mt-xl-0'>
-                                                    <Button color="outline-site-primary" block   onClick={optin} >App Optin</Button>
-                                                    
-                                                   
-                                                </Col>
-                                                <Col xl="4" md="12" className='mt-3 mt-xl-0'>
+                                            <Col xl="4" md="12" className='mt-3 mt-xl-0'>
                                                     
                                                     <Button color="outline-site-primary" block  onClick={assetoptin} >Asset Optin</Button>
                                                    
                                                 </Col>
+                                                <Col xl="4" md="12" className='mt-3 mt-xl-0'>
+                                                    <Button color="outline-site-primary" block   onClick={optin} >App Optin</Button>
+                                          
+                                                </Col>
+                                               
+                                                <Col xl="4" md="12" className='mt-3 mt-xl-0'>
+                                                    <Button color="outline-site-primary" block onClick={Claimreward} >claim reward</Button>
+                                                </Col>
+                                               
                                                 
                                             </Row>
 
