@@ -14,17 +14,17 @@ const Footer = (props) => {
                         {/* <a href="https://discord.com/channels/749283231450398721/874678038900645888" className="footer-nav-link">
                             Discord
                         </a> */}
-                        <a href="https://twitter.com/CarbonixFi" className="footer-nav-link">
+                        {/* <a href="https://twitter.com/CarbonixFi" className="footer-nav-link">
                             Twitter
                         </a>
                         <a href="https://t.me/blackcollateralannouncements" className="footer-nav-link">
                             Telegram
+                        </a> */}
+                        <a href="https://github.com/BosonLabs/SLATE-UI" className="footer-nav-link">
+                            DOCS
                         </a>
-                        <a href="https://github.com/BLACKCOLLATERAL/CarbonFinance" className="footer-nav-link">
-                            Whitepaper
-                        </a>
-                        <a href="https://github.com/CARBONIXDEFI" className="footer-nav-link">
-                            Github
+                        <a href="https://github.com/BosonLabs/SLATE-UI" className="footer-nav-link">
+                            GITHUB
                         </a>
                     </div>
                 </div>

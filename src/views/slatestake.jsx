@@ -72,6 +72,17 @@ const Slatestake = () => {
 
           }
           else{
+           
+           
+              
+                  // const accounts = await myAlgoConnect.connect();
+                  // if(accounts !== null)
+                  // console.log("Connected");
+                  // else
+                  // console.log("Not Connected");
+              
+              
+          
 
          
             const accts = await AlgoSigner.accounts({
@@ -84,7 +95,7 @@ const Slatestake = () => {
               });
               const tx = await client.accountInformation(localStorage.getItem("wallet"));
               console.log("accountinfo",tx);
-              console.log("value",r);
+              //console.log("value",r);
               let assetcheck= r.account['assets'];
               if(assetcheck=== null||assetcheck===undefined){
               alert("assetcheckalert");
@@ -193,6 +204,7 @@ const optin=async(assetID,responsetxId,addresseswall)=>{
   const signedTxn2 = await myAlgoConnect.signTransaction(transoptin2.toByte());
   const response = await algodclient.sendRawTransaction(signedTxn1.blob,signedTxn2.blob).do();
   console.log("optresponse",response)
+  alert("App Optin Successfully");
   //storedb(assetID,responsetxId,addresseswall);
   }
   catch (err) {
@@ -480,6 +492,7 @@ const stake = async() => {
  const response = await algodClient.sendRawTransaction([ signedTx1.blob, signedTx2.blob, signedTx3.blob]).do();
  console.log("TxID", JSON.stringify(response, null, 1));
  await waitForConfirmation(algodClient, response.txId);
+ alert("Staked Successfully");
      
    }
    catch (err) {
@@ -649,6 +662,7 @@ const groupID = algosdk.computeGroupID([ transaction1, transaction2, transaction
   const response = await algodClient.sendRawTransaction([ signedTx1.blob, signedTx2.blob, signedTx3.blob, signedTx4.blob]).do();
   console.log("TxID", JSON.stringify(response, null, 1));
   await waitForConfirmation(algodClient, response.txId);
+  alert("Unstaked Successfully");
 }
 catch (err) {
     console.error(err);
@@ -828,6 +842,7 @@ const groupID = algosdk.computeGroupID([ transaction1, transaction2, transaction
   const response = await algodClient.sendRawTransaction([ signedTx1.blob, signedTx2.blob, signedTx3.blob, signedTx4.blob,signedTx5.blob]).do();
   console.log("TxID", JSON.stringify(response, null, 1));
   await waitForConfirmation(algodClient, response.txId);
+  alert(" Reward Claimed Successfully");
 }
 catch (err) {
     console.error(err);
@@ -955,15 +970,15 @@ catch (err) {
                     <Col xl="8" lg="8" md="10" sm="12">
                         <Card className="custom-card">
                             <div className="p-3">
-                                <h4>stake  slate </h4>
-                                <h6>The Stake slate and get slate token as reward</h6>
+                                <h4>Stake  Slate </h4>
+                                <h6>The Stake Slate And Get Slate Token As Reward</h6>
                                 <Table bordered responsive className="mt-3">
                                     <thead>
                                         <tr>
-                                            <th>Your slate</th>
-                                            <th>Staked slate</th>
+                                            <th>Your Slate</th>
+                                            <th>Staked Slate</th>
                                            
-                                            <th>slate reward</th>
+                                            <th>Slate Reward</th>
                                            
                                                 
                                                 
@@ -994,7 +1009,7 @@ catch (err) {
 
                                         <InputGroup className="mt-3">
                                                 <Input placeholder={stakeamount} style={{ height: "auto" }}type = "number" id="tid1"  />
-                                                <InputGroupAddon addonType="append"><Button color="site-primary" onClick={stake}>stake</Button></InputGroupAddon>
+                                                <InputGroupAddon addonType="append"><Button color="site-primary" onClick={stake}>Stake</Button></InputGroupAddon>
                                             </InputGroup>
                                             <div className="percentage smaller">
                                                 <div className="percentage-item" onClick={0}>25%</div>
@@ -1014,7 +1029,7 @@ catch (err) {
               <div>
                                             <InputGroup className="mt-3">
                                                 <Input placeholder={unstakeamount} style={{ height: "auto" }}type = "number"  id="tid2"  />
-                                                <InputGroupAddon addonType="append"><Button color="site-primary" onClick={unstake}>unstake</Button></InputGroupAddon>
+                                                <InputGroupAddon addonType="append"><Button color="site-primary" onClick={unstake}>Unstake</Button></InputGroupAddon>
                                             </InputGroup>
                                             <div className="percentage smaller">
                                                 <div className="percentage-item"onClick={0}>25%</div>
@@ -1047,7 +1062,7 @@ catch (err) {
                                                 </Col>
                                                
                                                 <Col xl="4" md="12" className='mt-3 mt-xl-0'>
-                                                    <Button color="outline-site-primary" block onClick={Claimreward} >claim reward</Button>
+                                                    <Button color="outline-site-primary" block onClick={Claimreward} >Claim Reward</Button>
                                                 </Col>
                                                
                                                 
