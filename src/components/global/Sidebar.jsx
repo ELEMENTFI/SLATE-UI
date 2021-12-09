@@ -38,7 +38,7 @@ const Sidebar = (props) => {
      
         <div className="sidebar bg-site-secondary">
         <center>
-            <img src={logonew} style={{width:56 ,height:45,position:"relative"}} alt="Logo" />
+            <img src={logonew} style={{width:70 ,height:60,position:"relative"}} alt="Logo" />
             </center>
             <div className="theme-nav-items">
 {/*                
@@ -50,7 +50,7 @@ const Sidebar = (props) => {
                
                 <Link to="/yield-farming" className={`theme-nav-item ${history.location.pathname == "/yield-farming" ? "active" : ""}`}>
                     <i className="fa fa-tractor"></i>
-                    <span className="ml-3">Yieldfarming</span>
+                    <span className="ml-3">Yield Farming</span>
                 </Link>
                 
                
@@ -59,10 +59,7 @@ const Sidebar = (props) => {
                     <i className="fa fa-file"></i>
                     <span className="ml-3">Docs</span>
                 </Link>
-                <Link to="#" className={`theme-nav-item`}>
-                    <i className="fa fa-moon"></i>
-                    <span className="ml-3">Dark</span>
-                </Link>
+                
                 <Link to="#" className="theme-nav-item custom-navbar-toggler" onClick={e => toggleSidebar()}>
                     <i className="fa show-icon fa-arrow-left"></i>
                     <i className="fa hide-icon fa-arrow-right"></i>

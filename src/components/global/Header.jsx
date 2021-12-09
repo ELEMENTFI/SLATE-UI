@@ -95,10 +95,10 @@ const Header = (props) => {
                       <Button color="outline-site-primary" onClick={Connectalgosigner}>Algorand </Button>
                         {
                             localStorage.getItem("wallet")===null || localStorage.getItem("wallet")==="" ||localStorage.getItem("wallet")==='undefined' ||localStorage.getItem("wallet")===undefined ?  
-                            (<Button color="site-primary" className="ml-4"onClick={Connectwallet}>Connect Wallet</Button>):(
+                            (<Button color="site-primary" className="ml-4"onClick={Connectwallet}>CONNECT WALLET</Button>):(
                               < ><Button color="site-primary" className="ml-4" onClick={Connectwallet}>{localStorage.getItem("wallet").slice(0,10)}......{localStorage.getItem("wallet").slice(39,42)}</Button>
                                 &nbsp; &nbsp;
-                                <Button color="outline-site-primary" onClick={Disconnect}>disconnect</Button>
+                                <Button color="outline-site-primary" onClick={Disconnect}>DISCONNECT</Button>
                                 </>    
                             )
                         }
