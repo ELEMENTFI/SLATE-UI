@@ -6,6 +6,7 @@ SLATE aim to be the Decentralized Staking Platform ,where users can stake Algora
 
 # Table of Contents
   - Install
+  - Deploy
   - Contribute
   - Licence
 
@@ -13,7 +14,14 @@ SLATE aim to be the Decentralized Staking Platform ,where users can stake Algora
          
           npm install 
           npm i algosdk 
-    
+# Deploy
+          npm run start
+
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+
+The page will reload if you make edits.\
+You will also see any lint errors in the console.    
    
 # Contribute:
 To report bugs within this package, create an issue in this repository.Please contact operations@bosonlabs.net 
