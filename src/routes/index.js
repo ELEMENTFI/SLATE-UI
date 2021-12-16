@@ -2,6 +2,7 @@ import AuthView from '../views/auth/AuthView';
 
 import YieldFarming from '../views/YieldFarming';
 
+import BuySlate from '../views/BuySlate';
 
 
 import slateStake from'../views/slatestake';
@@ -46,6 +47,13 @@ let routes = [
 		path: '/yield-farming',
 		name: 'Yield Farming',
 		component: YieldFarming,
+		layout: 'main',
+	},
+
+	{
+		path: '/Buy-slate',
+		name: 'Buy slate',
+		component: BuySlate,
 		layout: 'main',
 	},
 	// {

@@ -34,125 +34,224 @@ const Slatestake = () => {
     const [isOpens, setIsOpens] = useState(false);
     var[dis,setDis] = useState("");
 
-
-
-
-
-
-    useEffect(() => {
-        const fetchPosts = async () => {
-            var  currentdate=(new Date().getTime())/1000;
-            var enddatediff = 1670436722-currentdate;
-            if(enddatediff>0){
-                setStakeendDate(1);
-        
-            }
-            else{
-                setStakeendDate(0);
-                console.log("enddate",stakeenddate);
-            }
-        
-        };
-        
     
-        fetchPosts();
-      }, []);
+    
+    useEffect(() => {
+      const fetchPosts = async () => {
+          var  currentdate=(new Date().getTime())/1000;
+          var enddatediff = 1670436722-currentdate;
+          if(enddatediff>0){
+              setStakeendDate(1);
+      
+          }
+          else{
+              setStakeendDate(0);
+              console.log("enddate",stakeenddate);
+          }
+      
+      };
+      
+  
+      fetchPosts();
+    }, []); 
+    
+
+
+
+
+
+
+
+
+
+
     const[balance,setBalance] = useState([]);
     const[stakedbalance,setStakedBalance] = useState([]);
     const[rewardamountbalance,setrewardBalance] = useState([]);
-    let assetid = 49116941;
-    let id = 49098300;
-    let key='"MjI="';
+    let assetid = 45655095;
+    let applicationid = 46315128;
+
     let address=localStorage.getItem("wallet");
 
-    useEffect(() => {
-      
-        const fetchPosts = async () => {
-          if(localStorage.getItem("wallet")=== null||localStorage.getItem("wallet")=== ""||localStorage.getItem("wallet")===undefined){
+   //localglobal
+    
+   useEffect(() => {
+    const fetchPosts = async () => {
+         // read local state of application from user account
+   //async function readLocalState(client, address, index){
+  let accountInfoResponse = await client.accountInformation(localStorage.getItem("wallet")).do();
+  // let val = await client.ApplicationInformation(appId);
+  // console.log("val",val)
+  console.log("accinfolocal",accountInfoResponse);
+  if( accountInfoResponse['apps-local-state'].length === null|| accountInfoResponse['apps-local-state'].length ===undefined||accountInfoResponse['apps-local-state'].length===""){
+    alert("check");
+ }
+else{
 
+
+  console.log("User",accountInfoResponse['apps-local-state'].length);
+  for (let i = 0; i < accountInfoResponse['apps-local-state'].length; i++) { 
+      if (accountInfoResponse['apps-local-state'][i].id == applicationid) {
+          console.log("User's local state:",accountInfoResponse['apps-local-state'][i].id);
+          let acccheck= accountInfoResponse['apps-local-state'][i][`key-value`]; 
+          console.log("Usercheck",acccheck);
+          console.log("User",accountInfoResponse['apps-local-state'][i][`key-value`]);
+        
+          if(accountInfoResponse['apps-local-state'][i][`key-value`]=== null|| accountInfoResponse['apps-local-state'][i][`key-value`] === undefined||accountInfoResponse['apps-local-state'][i][`key-value`]===""){
+            alert("check");
+         }
+        else{
+for (let n = 0; n < accountInfoResponse['apps-local-state'][i][`key-value`].length; n++) {
+              console.log(accountInfoResponse['apps-local-state'][i][`key-value`][n]);
+              //setStakedBalance(accountInfoResponse['apps-local-state'][i][`key-value`][n]);
+              
+              let rewardkey =accountInfoResponse['apps-local-state'][i]['key-value'][n];
+             if(rewardkey['key'] === "MjA="){
+               setStakedBalance(accountInfoResponse['apps-local-state'][i]['key-value'][n]['value']['uint']);
+             }
+            if(rewardkey['key'] === "MjI="){
+              console.log("rewardcheck",accountInfoResponse['apps-local-state'][i]['key-value'][n]['value']['uint']);
+              setrewardBalance(accountInfoResponse['apps-local-state'][i]['key-value'][n]['value']['uint']);
+              console.log("rewardcheck",accountInfoResponse['apps-local-state'][i]['key-value'][n]['value']['uint']);
+            }
+            
+              
           }
-          else{
+
+        }
+
+          
+      }
+  }
+}
+  for(let i = 0; i < accountInfoResponse['assets'].length; i++){
+    console.log("accountsasset", accountInfoResponse['assets']);
+     if (accountInfoResponse['assets'][i]['asset-id'] == assetid) {
+      setBalance(accountInfoResponse['assets'][i]['amount']);
+      console.log("accountsassetnew", accountInfoResponse['assets'][i]['amount']);
+
+     }
+  }
+  
+  for (let i = 0; i < accountInfoResponse['created-apps'].length; i++) { 
+     console.log("Application's global state:");
+    if (accountInfoResponse['created-apps'][i].id == applicationid) {
+        console.log("Application's global state:");
+        for (let n = 0; n < accountInfoResponse['created-apps'][i]['params']['global-state'].length; n++) {
+            console.log(accountInfoResponse['created-apps'][i]['params']['global-state'][n]);
+            let enc = accountInfoResponse['created-apps'][i]['params']['global-state'][n];
+            var decodedString = window.atob(enc.key);
+      
+        }
+        
+    }
+}
+
+    
+    };
+    
+
+    fetchPosts();
+  }, []);
+
+
+
+    // useEffect(() => {
+    
+    //     const fetchPosts = async () => {
+    //       if(localStorage.getItem("wallet")=== null||localStorage.getItem("wallet")=== ""||localStorage.getItem("wallet")===undefined){
+
+    //       }
+    //       else{
            
            
               
-                  // const accounts = await myAlgoConnect.connect();
-                  // if(accounts !== null)
-                  // console.log("Connected");
-                  // else
-                  // console.log("Not Connected");
+    //               // const accounts = await myAlgoConnect.connect();
+    //               // if(accounts !== null)
+    //               // console.log("Connected");
+    //               // else
+    //               // console.log("Not Connected");
               
               
           
 
          
-            const accts = await AlgoSigner.accounts({
-                ledger: 'TestNet'
-              });
-              const r = await AlgoSigner.indexer({
-                ledger: 'TestNet',
-                //path: `/v2​/assets​/${assetid}​/balances​`
-                path: `/v2/accounts/${localStorage.getItem("wallet")}`
-              });
-              const tx = await client.accountInformation(localStorage.getItem("wallet"));
-              console.log("accountinfo",tx);
-              //console.log("value",r);
-              let assetcheck= r.account['assets'];
-              if(assetcheck=== null||assetcheck===undefined){
-              alert("assetcheckalert");
-              }else{
+    //         const accts = await AlgoSigner.accounts({
+    //             ledger: 'TestNet'
+    //           });
+    //           const r = await AlgoSigner.indexer({
+    //             ledger: 'TestNet',
+    //             //path: `/v2​/assets​/${assetid}​/balances​`
+    //             path: `/v2/accounts/${localStorage.getItem("wallet")}`
+    //           });
+    //             console.log("algoUA",r.account['apps-local-state']);
+    //           const tx = await client.accountInformation(localStorage.getItem("wallet"));
+    //           console.log("accountinfo",tx);
+    //           //console.log("value",r);
+    //           let assetcheck= r.account['assets'];
+    //           if(assetcheck=== null||assetcheck===undefined){
+    //           alert("assetcheckalert");
+    //           }else{
 
               
-              //console.log("newasset",assetcheck.length);
-             for(let i=0;i<assetcheck.length;i++){
-               let assetidget = r.account['assets'][i]['asset-id'];
-               if(assetidget === assetid ){
-                  setBalance(r.account['assets'][i]['amount']);
-                  console.log("stakedbalancecheck",r['account']['apps-local-state']);
-               }
-               }
-                let rewardcheck=r.account['apps-local-state'];
-                if(rewardcheck=== null||rewardcheck===undefined){
-                  alert("rewardcheckalert");
-                }else{
-                  console.log("check",rewardcheck.length);
-                  for(let i=0;i<rewardcheck.length;i++){
-                    let rewardidget = r.account['apps-local-state'][i]['id'];
-                   // console.log("rewardidget",rewardidget);
-                   if(rewardidget === id ){
-                        console.log("checked",rewardidget);
-                        let checkrewardkey = r.account['apps-local-state'][i]['key-value'];
-                        console.log("checkrewardj",checkrewardkey.length)
-                        for(let j=0;j<checkrewardkey.length;j++){
-                         let rewardkey = r.account['apps-local-state'][i]['key-value'][j];
-                         //console.log("rewardkey",rewardkey.key);
-                         if(rewardkey['key'] === "MjI="){
-                             console.log("checked1");
-                             console.log("rewardbalancecheck",r['account']['apps-local-state'][i]['key-value'][j]['value']['uint']);
-                             setrewardBalance(r['account']['apps-local-state'][i]['key-value'][j]['value']['uint']);
-                             console.log("checked2");
-                             }
-                             else if(rewardkey['key'] === "MjA="){
-                               console.log("checked3");
-                               console.log("stakedbalancecheck",r['account']['apps-local-state'][i]['key-value'][j]['value']['uint']);
-                               setStakedBalance(r['account']['apps-local-state'][i]['key-value'][j]['value']['uint']);
-                               console.log("checked4");
-                             }
-                        }
+    //           //console.log("newasset",assetcheck.length);
+    //          for(let i=0;i<assetcheck.length;i++){
+    //            let assetidget = r.account['assets'][i]['asset-id'];
+    //            if(assetidget === assetid ){
+    //               setBalance(r.account['assets'][i]['amount']);
+    //               console.log("stakedbalancecheck",r['account']['apps-local-state']);
+    //            }
+    //            }
+    //             let rewardcheck=r.account['apps-local-state'];
+    //             if(rewardcheck=== null||rewardcheck===undefined){
+    //               alert("rewardcheckalert");
+    //             }else{
+    //               console.log("check",rewardcheck.length);
+    //               for(let i=0;i<rewardcheck.length;i++){
+    //                 let rewardidget = r.account['apps-local-state'][i]['id'];
+    //                 console.log("rewardidget",rewardidget);
+    //                if(rewardidget === applicationid ){
+    //                     console.log("checked",rewardidget);
+    //                     let checkrewardkey = r.account['apps-local-state'][i]['key-value'];
+    //                      if(checkrewardkey=== null||checkrewardkey===undefined||checkrewardkey===""){
+    //                        alert("checkrewardkey");
+    //                      }
+    //                      else{
+
+                        
+    //                    //console.log("checkrewardj",checkrewardkey.length)
+    //                     for(let j=0;j<checkrewardkey.length;j++){
+    //                      let rewardkey = r.account['apps-local-state'][i]['key-value'][j];
+    //                      //console.log("rewardkey",rewardkey.key);
+    //                      if(rewardkey['key'] === "MjI="){
+    //                          console.log("checked1");
+    //                          console.log("rewardbalancecheck",r['account']['apps-local-state'][i]['key-value'][j]['value']['uint']);
+    //                          setrewardBalance(r['account']['apps-local-state'][i]['key-value'][j]['value']['uint']);
+    //                          console.log("checked2");
+    //                          }
+    //                          else if(rewardkey['key'] === "MjA="){
+    //                            console.log("checked3");
+    //                            console.log("stakedbalancecheck",r['account']['apps-local-state'][i]['key-value'][j]['value']['uint']);
+    //                            setStakedBalance(r['account']['apps-local-state'][i]['key-value'][j]['value']['uint']);
+    //                            console.log("checked4");
+    //                          }
+    //                     }
                          
                        
                      
-                 }
+    //              }
                 
-            }
-                }
+    //         }
+    //       }
+    //             }
             
 
-          }
-        }    
-        };
+    //       }
+    //     }    
+    //     };
     
-        fetchPosts();
-      },[]);
+    //     fetchPosts();
+    //   },[]);
     const [show, setShow] = React.useState(false);
 
     const handleClose = () => setShow(false);
@@ -177,8 +276,8 @@ const optin=async(assetID,responsetxId,addresseswall)=>{
   const algosdk = require('algosdk');
   const algodclient = new algosdk.Algodv2('', 'https://api.testnet.algoexplorer.io/', '');
   const myAlgoConnect = new MyAlgoConnect();
-  let appId1 = 49099237;
-  let appId2 = 49098300;
+  let appId1 = 46315308;
+  let appId2 = 46315128;
   try {
     //const accounts = await myAlgoWallet.connect();
     //const addresses = accounts.map(account => account.address);
@@ -202,8 +301,10 @@ const optin=async(assetID,responsetxId,addresseswall)=>{
 
   const signedTxn1 = await myAlgoConnect.signTransaction(transoptin1.toByte());
   const signedTxn2 = await myAlgoConnect.signTransaction(transoptin2.toByte());
-  const response = await algodclient.sendRawTransaction(signedTxn1.blob,signedTxn2.blob).do();
-  console.log("optresponse",response)
+  const response1 = await algodclient.sendRawTransaction(signedTxn1.blob).do();
+  const response2 = await algodclient.sendRawTransaction(signedTxn2.blob).do();
+  console.log("optresponse",response1)
+  console.log("optresponse",response2);
   alert("App Optin Successfully");
   //storedb(assetID,responsetxId,addresseswall);
   }
@@ -306,8 +407,8 @@ const optin=async(assetID,responsetxId,addresseswall)=>{
       
 //       // create new application
 //       //let appId = await createApp(algodClient, creatorAccount, approvalProgram, clearProgram, localInts, localBytes, globalInts, globalBytes);
-//       let appId1 = 49099237;
-//       let appId2 = 49098300;
+//       let appId1 = 46315308;
+//       let appId2 = 46315128               ;
 //       // opt-in to application
 //       await optInApp(algodClient, account, appId1,appId2);
      
@@ -327,7 +428,7 @@ const params = await algodclient.getTransactionParams().do();
 const assetoptin1 = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
   from: localStorage.getItem('wallet'),
   to: localStorage.getItem('wallet'),
-  assetIndex: 49116941,
+  assetIndex: 45655095,
   note: undefined,
   amount: 0,
   suggestedParams: params
@@ -349,7 +450,7 @@ const assetoptin1 = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
 //   const txn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
 //     from: opt_sender,
 //     to: opt_sender,
-//     assetIndex: 49116941,
+//     assetIndex: 45655095,
 //     note: undefined,
 //     amount: 0,
 //     suggestedParams: {...txParamsJS}
@@ -401,13 +502,24 @@ const stake = async() => {
  
    var amt = document.getElementById("tid1").value; 
    let stakeamount = parseInt(amt) * 1000000;
+
+
+
+
+
+
+   
+
+
+
+
    global.TextEncoder = require("util").TextEncoder; 
  
    setaccount(localStorage.getItem("wallet"));
    let sender = localStorage.getItem("wallet");
-   let assetid = 49116941;
-   let appId1 = 49099237;
-   let appId2 = 49098300;
+   let assetid = 45655095;
+   let appId1 = 46315308;
+   let appId2 = 46315128;               ;
    
    // helper function to await transaction confirmation
    // Function used to wait for a tx confirmation
@@ -472,12 +584,19 @@ const stake = async() => {
    
    let transaction3 =algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
      from: sender,
-     to: "WJGZYFRGIQSR2SUR5RZGJKCENKB74TDE2DJ2KIYWW23DXV742VJYP2SIFM",
+     to: "BY7Q2TTADPQQ2AIPS7YTGQ64UBNYW56AII7G2MWUBBUHUHV4O446R5LVJA",
      amount:stakeamount,
      note: undefined,
-     assetIndex: 49116941,
+     assetIndex: 45655095,
      suggestedParams: params});
    
+    //  let transaction3 =algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+    //   from: sender,
+    //   to: "BY7Q2TTADPQQ2AIPS7YTGQ64UBNYW56AII7G2MWUBBUHUHV4O446R5LVJA",
+    //   amount: stakeamount,
+    //   note: undefined,
+    //   suggestedParams: params}); 
+
      const groupID = algosdk.computeGroupID([ transaction1, transaction2, transaction3]);
      const txs = [ transaction1, transaction2, transaction3];
      txs[0].group = groupID;
@@ -509,8 +628,8 @@ const unstake = async() => {
   const algodClient = new algosdk.Algodv2('', 'https://api.testnet.algoexplorer.io', '');
 
 
-  let appId1 = 49099237;
-  let appId2 = 49098300;
+  let appId1 = 46315308;
+  let appId2 = 46315128;
   var amt = document.getElementById("tid2").value; 
   let unstakeamount = parseInt(amt) * 1000000;
   global.TextEncoder = require("util").TextEncoder; 
@@ -536,46 +655,47 @@ const unstake = async() => {
     console.log("Address =", addresses);
       var escrowdata = `#pragma version 4
 
-  global GroupSize // size=6
-  int 2
-  >=
-  global GroupSize // size=6
-  int 6
-  <=
-  &&
-  bz label1
-  gtxn 0 ApplicationID // id=233725848
-  int 49099237
-  ==
-  bnz label2
-  b label1
-  label2:
-  gtxn 0 TypeEnum
-  int 6 // ApplicationCall
-  ==
-  gtxn 0 OnCompletion
-  int 0 // NoOp
-  ==
-  int 0
-  gtxn 0 OnCompletion
-  ==
-  ||
-  &&
-  gtxn 1 RekeyTo // AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ
-  global ZeroAddress
-  ==
-  &&
-  gtxn 0 RekeyTo // AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ
-  global ZeroAddress
-  ==
-  &&
-  bnz label3
-  label1:
-  int 0
-  return
-  label3:
-  int 1
-  return
+      global GroupSize // size=6
+      int 2
+      >=
+      global GroupSize // size=6
+      int 6
+      <=
+      &&
+      bz label1
+      gtxn 0 ApplicationID
+      int 46315308
+      ==
+      bnz label2
+      b label1
+      label2:
+      gtxn 0 TypeEnum
+      int 6 // ApplicationCall
+      ==
+      gtxn 0 OnCompletion
+      int 0 // NoOp
+      ==
+      int 0
+      gtxn 0 OnCompletion
+      ==
+      ||
+      &&
+      gtxn 1 RekeyTo // AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ
+      global ZeroAddress
+      ==
+      &&
+      gtxn 0 RekeyTo // AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ
+      global ZeroAddress
+      ==
+      &&
+      bnz label3
+      label1:
+      int 0
+      return
+      label3:
+      int 1
+      return
+      
   
   `;
     
@@ -636,8 +756,19 @@ console.log("logic",sender1)
       to: receiver,
       amount: unstakeamount,
       note: undefined,
-      assetIndex: 49116941,
+      assetIndex: 45655095,
       suggestedParams: params});
+
+      // let transaction3 =algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+      //   from: sender1,
+      //   to: receiver,
+      //   amount:unstakeamount,
+      //   note: undefined,
+      //   suggestedParams: params});
+
+
+
+
     let transaction4 =algosdk.makePaymentTxnWithSuggestedParamsFromObject({
       from: sender,
       to: sender1,
@@ -674,8 +805,8 @@ const Claimreward = async() => {
   const algodClient = new algosdk.Algodv2('', 'https://api.testnet.algoexplorer.io', '');
 
 
-  let appId1 = 49099237;
-  let appId2 = 49098300;
+  let appId1 = 46315308;
+  let appId2 = 46315128;
   
   global.TextEncoder = require("util").TextEncoder; 
   // const algosdk = require('algosdk');
@@ -709,7 +840,7 @@ const Claimreward = async() => {
   &&
   bz label1
   gtxn 0 ApplicationID // id=233725848
-  int 49099237
+  int 46315308
   ==
   bnz label2
   b label1
@@ -812,9 +943,9 @@ console.log("logic",sender1)
     let transaction4 =algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
       from: sender1,
       to: receiver,
-      amount: parseInt(rewardamountbalance/1000000),
+      amount: parseInt(rewardamountbalance/100000000000),
       note: undefined,
-      assetIndex: 49116941,
+      assetIndex: 45655095,
       suggestedParams: params});
     let transaction5 =algosdk.makePaymentTxnWithSuggestedParamsFromObject({
       from: sender,
@@ -875,16 +1006,14 @@ catch (err) {
                     <Col xl="8" lg="8" md="10" sm="12">
                         <Card className="custom-card">
                             <div className="p-3">
-                                <h4>stake  cbUSD </h4>
-                                <h6>The Stake cbUSD and get Black token as reward</h6>
+                            <h4>Stake  Slate </h4>
+                                <h6>The Stake Slate And Get Slate Token As Reward</h6>
                                 <Table bordered responsive className="mt-3">
                                     <thead>
                                         <tr>
-                                            <th>Your cbUSD</th>
-                                            <th>Staked cbUSD</th>
-                                            <th>Remaining Amount to Stake </th>
-                                            <th>Black reward</th>
-                                            <th>Your Black</th>
+                                        <th>Your Slate</th>
+                                            <th>Staked Slate</th>
+                                            <th>Slate Reward</th>
                                         </tr>
                                     </thead>
                                     <tbody className="text-center">
@@ -892,8 +1021,7 @@ catch (err) {
                                             <td>0.00</td>
                                             <td>0.00</td>
                                             <td>0.00</td>
-                                            <td>0.00</td>
-                                            <td>0.00</td>
+                                          
                                         </tr>
                                     </tbody>
                                 </Table>
@@ -905,7 +1033,7 @@ catch (err) {
                                         {stakeenddate===1 ? (<> 
                                             <InputGroup className="mt-3">
                                                 
-                                            <Input placeholder={0} style={{ height: "auto" }}type = "number" id="tid1"  />
+                                            <Input placeholder={0} style={{ height: "auto" }}type = "number"  />
                                                 <InputGroupAddon addonType="append"><Button color="site-primary" style={{ height: "auto" }}>stake</Button></InputGroupAddon>
                                             </InputGroup>
                                             <div className="percentage smaller">
@@ -927,7 +1055,7 @@ catch (err) {
                                         <Col xl="6" md="12">
                                    
                                             <InputGroup className="mt-3">
-                                                <Input placeholder={0} style={{ height: "auto" }}type = "number"  id="tid2"  />
+                                                <Input placeholder={0} style={{ height: "auto" }}type = "number"   />
                                                 <InputGroupAddon addonType="append"><Button color="site-primary" >unstake</Button></InputGroupAddon>
                                             </InputGroup>
                                             <div className="percentage smaller">

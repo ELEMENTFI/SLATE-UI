@@ -52,7 +52,10 @@ const Sidebar = (props) => {
                     <i className="fa fa-tractor"></i>
                     <span className="ml-3">Yield Farming</span>
                 </Link>
-                
+                <Link to="/Buy-slate" className={`theme-nav-item ${history.location.pathname == "/Buy-slate" ? "active" : ""}`}>
+                   <i className="fa fa-wallet"></i>
+                    <span className="ml-3">BUY SLATE</span>
+                </Link>
                
                 <hr/>
                 <Link to="/docs" className={`theme-nav-item ${history.location.pathname == "/docs" ? "active" : ""}`}>
