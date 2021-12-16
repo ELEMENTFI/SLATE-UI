@@ -1006,16 +1006,14 @@ catch (err) {
                     <Col xl="8" lg="8" md="10" sm="12">
                         <Card className="custom-card">
                             <div className="p-3">
-                                <h4>stake  cbUSD </h4>
-                                <h6>The Stake cbUSD and get Black token as reward</h6>
+                            <h4>Stake  Slate </h4>
+                                <h6>The Stake Slate And Get Slate Token As Reward</h6>
                                 <Table bordered responsive className="mt-3">
                                     <thead>
                                         <tr>
-                                            <th>Your cbUSD</th>
-                                            <th>Staked cbUSD</th>
-                                            <th>Remaining Amount to Stake </th>
-                                            <th>Black reward</th>
-                                            <th>Your Black</th>
+                                        <th>Your Slate</th>
+                                            <th>Staked Slate</th>
+                                            <th>Slate Reward</th>
                                         </tr>
                                     </thead>
                                     <tbody className="text-center">
@@ -1023,8 +1021,7 @@ catch (err) {
                                             <td>0.00</td>
                                             <td>0.00</td>
                                             <td>0.00</td>
-                                            <td>0.00</td>
-                                            <td>0.00</td>
+                                          
                                         </tr>
                                     </tbody>
                                 </Table>

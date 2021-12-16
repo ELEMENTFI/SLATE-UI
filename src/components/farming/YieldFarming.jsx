@@ -1,4 +1,8 @@
-import { useState } from "react";
+/* global AlgoSigner */
+import MyAlgoConnect from '@randlabs/myalgo-connect';
+//import React, { Component, useState, useEffect, useRef } from 'react';
+import React, { Component, useState, useEffect, useRef } from 'react';
+
 import { Link } from "react-router-dom";
 import { Container, Button, Col, Row, Card, Table } from "reactstrap";
 import icon from "../../assets/img/icon.PNG";
@@ -14,19 +18,64 @@ import Pools from "./Pools";
 
 
 //import blackoracle from "../../views/blackOracleAbi";
-import { useEffect } from "react";
-import web3 from "../../web3";
-const YieldFarming = (props) => {
- 
-  const farmdisplay = async() => {           
 
-   
+import web3 from "../../web3";
+const algosdk = require('algosdk');
+const algodClient = new algosdk.Algodv2('', 'https://api.testnet.algoexplorer.io', '');
+const myAlgoConnect = new MyAlgoConnect();
+const YieldFarming = ()  => {
+ 
+ 
+  const[totalstake,setTotalStake]=useState("");
+  
+  const[totalreward,setTotalreward]=useState("");
+    useEffect(() => {
+      const fetchPosts = async () => {
+     
+    let applicationid = 46315128;
+    const client = new algosdk.Algodv2('', 'https://api.testnet.algoexplorer.io', '');
+    let accountInfoResponse1 = await client.accountInformation("J2BO4CWHCK4LVUZWUQH7BFNK7TMWQLPNN5TW4LIXSECJ6IY3MKDRBE7QLA").do();
+  
+  for (let i = 0; i < accountInfoResponse1['created-apps'].length; i++) { 
+     console.log("Application's global state:");
+    if (accountInfoResponse1['created-apps'][i].id == applicationid) {
+        console.log("Application's global state:");
+        for (let n = 0; n < accountInfoResponse1['created-apps'][i]['params']['global-state'].length; n++) {
+            console.log(accountInfoResponse1['created-apps'][i]['params']['global-state'][n]);
+            let enc = accountInfoResponse1['created-apps'][i]['params']['global-state'][n];
+            console.log("encode",enc);
+            var decodedString = window.atob(enc.key);
+            if(enc['key'] === "Z2E="){
+              setTotalStake( accountInfoResponse1['created-apps'][i]['params']['global-state'][n]['value']['uint']);
+              console.log("checktvl", accountInfoResponse1['created-apps'][i]['params']['global-state'][n]['value']['uint'])
+            }
+            if(enc['key'] === "Z3Nz"){
+              setTotalreward( accountInfoResponse1['created-apps'][i]['params']['global-state'][n]['value']['uint']);
+              console.log("checktvl", accountInfoResponse1['created-apps'][i]['params']['global-state'][n]['value']['uint'])
+            }
+        }
+        
+    }
+}
+      
+      };
+      
+  
+      fetchPosts();
+    }, []);
+
+
+
+
+
+
+
 
         
        
       
- }
- useEffect(()=>{farmdisplay()},[])
+ 
+
   let [activeTab, setActiveTab] = useState("ViewPool");
   let [series, setSeries] = useState([{
     name:"Deposits",
@@ -55,10 +104,10 @@ const YieldFarming = (props) => {
     <>
       <Row className="m-3 m-md-5">
         <Col xl="4" lg="8" xs="12" className="mb-4">
-          <CustomCard title="TOTAL VALUE LOCKED" text={0}  />
+          <CustomCard title="TOTAL VALUE LOCKED" text={parseInt(totalstake/1000000)}  subText="SLATE" />
         </Col>
         <Col xl="4" lg="8" xs="12" className="mb-4">
-          <CustomCard title="SLATE REWARDS" text={0} subText="out of 3,000,000" />
+          <CustomCard title="SLATE REWARDS" text={parseInt(totalreward/1000000)} subText="out of 3,000,000" />
         </Col>
         {/* <Col xl="4" lg="8" xs="12" className="mb-4">
           <CustomCard title="SLATE PRICE" text={0} subText="Uniswap market" />
