@@ -8,6 +8,9 @@ import web3 from "../web3";
 import Popup from "../Popup";
 import Modald from "../ModalD";
 import FolowStepsd from "../FolowStepsd";
+
+import FolowStepPro from '../FolowStepPro';
+import ModalDCopy from '../ModalDCopy';
 import BigNumber from "bignumber.js";
 import FolowStepsdcopy from "../FolowStepsdcopy";
 const algosdk = require('algosdk');
@@ -35,6 +38,9 @@ const Buyslate = () => {
     var[dis,setDis] = useState("");
 
     
+const [isOpennew, setIsOpennew] = useState(false);
+const [isOpennewpro, setIsOpennewpro] = useState(false);
+const[datasendhere,datasethere] = useState("");
     
     
     
@@ -169,6 +175,9 @@ let client = new algosdk.Algodv2(algodToken, algodServer, algodPort);
 
 
 const assetoptin = async() => {
+
+  try{
+    setIsOpennewpro(true)
 const algosdk = require('algosdk');
 const algodclient = new algosdk.Algodv2('', 'https://api.testnet.algoexplorer.io/', '');
 const myAlgoConnect = new MyAlgoConnect();
@@ -185,6 +194,14 @@ const assetoptin1 = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
   const signedTxnass = await myAlgoConnect.signTransaction(assetoptin1.toByte());
   const responseass = await algodClient.sendRawTransaction(signedTxnass.blob).do();
   console.log("optresponse",responseass)
+  datasethere("Asset Opt-in successfull")
+  setIsOpennewpro(false)
+  setIsOpennew(true)
+}
+catch (err) {
+  console.error(err);
+  setIsOpennewpro(false)
+}
 }
 
 
@@ -199,7 +216,8 @@ const assetoptin1 = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
  //unstake
 
 const Buy = async() => {
-
+  try{
+    setIsOpennewpro(true)
   const algodClient = new algosdk.Algodv2('', 'https://api.testnet.algoexplorer.io', '');
 
 
@@ -325,10 +343,18 @@ const groupID = algosdk.computeGroupID([transaction1, transaction2]);
   const response = await algodClient.sendRawTransaction([ signedTx1.blob, signedTx2.blob]).do();
   console.log("TxID", JSON.stringify(response, null, 1));
   await waitForConfirmation(algodClient, response.txId);
-  alert("Buy Successfully");
+  //alert("Buy Successfully");
+  datasethere("Buy Successfully")
+  setIsOpennewpro(false)
+  setIsOpennew(true)
 }
 catch (err) {
     console.error(err);
+}
+}
+catch (err) {
+    console.error(err);
+    setIsOpennewpro(false)
 }
 
 }
@@ -543,7 +569,7 @@ catch (err) {
                                 <Table bordered responsive className="mt-3">
                                     <thead>
                                         <tr>
-                                        <th>Your Slate</th>
+                                        <th><center>Your Slate</center></th>
 
                                         </tr>
                                     </thead>
@@ -563,7 +589,9 @@ catch (err) {
                                         <Col xl="12" md="12">
                                       
                                             <InputGroup className="mt-3">
-                                                
+                                            <label>
+                                           Enter amount &nbsp;&nbsp;&nbsp;
+                                          </label>
                                             <Input placeholder={0} style={{ height: "auto" }}type = "number"  />
                                                
                                             </InputGroup>
@@ -610,7 +638,7 @@ catch (err) {
                                 <Table bordered responsive className="mt-3">
                                     <thead>
                                         <tr>
-                                            <th>Your Slate</th>
+                                            <th><center>Your Slate</center></th>
                                          
                                                 
                                                 
@@ -637,6 +665,9 @@ catch (err) {
                                       <> 
 
                                         <InputGroup className="mt-3">
+                                          <label>
+                                           Enter amount &nbsp;&nbsp;&nbsp;
+                                          </label>
                                                 <Input placeholder={unstakeamount} style={{ height: "auto" }}type = "number" id="tid2"  />
                                                 {/* <InputGroupAddon addonType="append"><Button color="site-primary" onClick={Buy}>Buy</Button></InputGroupAddon> */}
                                             </InputGroup>
@@ -681,7 +712,14 @@ catch (err) {
                     </Col>
                 </Row>
  </Container>
-       
+ <Modald visible={isOpennew} onClose={() => setIsOpennew(false)}>
+        <FolowStepsd viewhistory={dis} data={datasendhere} />
+  </Modald>
+
+  <ModalDCopy visible={isOpennewpro} >
+        <FolowStepPro />
+  </ModalDCopy>
+  
           </>
         }
        </section>

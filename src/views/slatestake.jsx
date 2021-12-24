@@ -8,6 +8,8 @@ import web3 from "../web3";
 import Popup from "../Popup";
 import Modald from "../ModalD";
 import FolowStepsd from "../FolowStepsd";
+import FolowStepPro from '../FolowStepPro';
+import ModalDCopy from '../ModalDCopy';
 import BigNumber from "bignumber.js";
 import FolowStepsdcopy from "../FolowStepsdcopy";
 const algosdk = require('algosdk');
@@ -33,7 +35,9 @@ const Slatestake = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [isOpens, setIsOpens] = useState(false);
     var[dis,setDis] = useState("");
-
+    const [isOpennew, setIsOpennew] = useState(false);
+    const [isOpennewpro, setIsOpennewpro] = useState(false);
+    const[datasendhere,datasethere] = useState("");
     
     
     useEffect(() => {
@@ -367,6 +371,8 @@ let algodPort = "";
 let client = new algosdk.Algodv2(algodToken, algodServer, algodPort);
 
 const optin=async(assetID,responsetxId,addresseswall)=>{
+  try{    
+    setIsOpennewpro(true)
   const algosdk = require('algosdk');
   const algodclient = new algosdk.Algodv2('', 'https://api.testnet.algoexplorer.io/', '');
   const myAlgoConnect = new MyAlgoConnect();
@@ -399,13 +405,21 @@ const optin=async(assetID,responsetxId,addresseswall)=>{
   const response2 = await algodclient.sendRawTransaction(signedTxn2.blob).do();
  // console.log("optresponse",response1)
   console.log("optresponse",response2);
-  alert("App Optin Successfully");
+  //alert("App Optin Successfully");
   //storedb(assetID,responsetxId,addresseswall);
+  datasethere("App Optin Successfully")
+  setIsOpennewpro(false)
+  setIsOpennew(true)
   }
   catch (err) {
     console.error(err);
     //storedb(assetID,responsetxId,addresseswall);
   }
+}
+catch (err) {
+    console.error(err);
+    setIsOpennewpro(false)
+}
 }
 
 
@@ -515,6 +529,8 @@ const optin=async(assetID,responsetxId,addresseswall)=>{
 //   main();
 //   }
 const assetoptin = async() => {
+  setIsOpennewpro(true)
+try{
 const algosdk = require('algosdk');
 const algodclient = new algosdk.Algodv2('', 'https://api.testnet.algoexplorer.io/', '');
 const myAlgoConnect = new MyAlgoConnect();
@@ -531,6 +547,14 @@ const assetoptin1 = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
   const signedTxnass = await myAlgoConnect.signTransaction(assetoptin1.toByte());
   const responseass = await algodClient.sendRawTransaction(signedTxnass.blob).do();
   console.log("optresponse",responseass)
+  datasethere("Asset Optin Successfully")
+  setIsOpennewpro(false)
+  setIsOpennew(true)
+}
+catch (err) {
+    console.error(err);
+    setIsOpennewpro(false)
+}
 }
 
 
@@ -591,6 +615,8 @@ const assetoptin1 = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
  //stakingpartstart
 //stakingpartstart
 const stake = async() => {
+  try{
+    setIsOpennewpro(true)
   const algosdk = require('algosdk');
   const algodClient = new algosdk.Algodv2('', 'https://api.testnet.algoexplorer.io', '');
  
@@ -705,12 +731,19 @@ const stake = async() => {
  const response = await algodClient.sendRawTransaction([ signedTx1.blob, signedTx2.blob, signedTx3.blob]).do();
  console.log("TxID", JSON.stringify(response, null, 1));
  await waitForConfirmation(algodClient, response.txId);
- alert("Staked Successfully");
-     
+ //alert("Staked Successfully");
+ datasethere("Staked Successfully")
+ setIsOpennewpro(false)
+ setIsOpennew(true)
    }
    catch (err) {
        console.error(err);
    }
+  }
+  catch (err) {
+      console.error(err);
+      setIsOpennewpro(false)
+  }
 
 }       
 
@@ -718,7 +751,8 @@ const stake = async() => {
  //unstake
 
 const unstake = async() => {
-
+  setIsOpennewpro(true)
+  try{
   const algodClient = new algosdk.Algodv2('', 'https://api.testnet.algoexplorer.io', '');
 
 
@@ -890,15 +924,24 @@ const groupID = algosdk.computeGroupID([ transaction1, transaction2, transaction
   const response = await algodClient.sendRawTransaction([ signedTx1.blob, signedTx2.blob, signedTx3.blob]).do();
   console.log("TxID", JSON.stringify(response, null, 1));
   await waitForConfirmation(algodClient, response.txId);
-  alert("Unstaked Successfully");
+ // alert("Unstaked Successfully");
+ datasethere("Unstaked Successfully")
+ setIsOpennewpro(false)
+ setIsOpennew(true)
 }
 catch (err) {
     console.error(err);
 }
+}
+catch (err) {
+    console.error(err);
+    setIsOpennewpro(false)
+}
 
 }
 const Claimreward = async() => {
-
+  setIsOpennewpro(true)
+  try{
   const algodClient = new algosdk.Algodv2('', 'https://api.testnet.algoexplorer.io', '');
 
 
@@ -1072,10 +1115,18 @@ const groupID = algosdk.computeGroupID([ transaction1, transaction2, transaction
   const response = await algodClient.sendRawTransaction([ signedTx1.blob, signedTx2.blob,signedTx4.blob]).do();
   console.log("TxID", JSON.stringify(response, null, 1));
   await waitForConfirmation(algodClient, response.txId);
-  alert(" Reward Claimed Successfully");
+ // alert(" Reward Claimed Successfully");
+ datasethere("Reward Claimed Successfully")
+ setIsOpennewpro(false)
+ setIsOpennew(true)
 }
 catch (err) {
     console.error(err);
+}
+}
+catch (err) {
+    console.error(err);
+    setIsOpennewpro(false)
 }
 
 }  
@@ -1308,6 +1359,15 @@ catch (err) {
                     </Col>
                 </Row>
  </Container>
+
+ <Modald visible={isOpennew} onClose={() => setIsOpennew(false)}>
+        <FolowStepsd viewhistory={dis} data={datasendhere} />
+  </Modald>
+
+  <ModalDCopy visible={isOpennewpro} >
+        <FolowStepPro />
+  </ModalDCopy>
+  
        
           </>
         }

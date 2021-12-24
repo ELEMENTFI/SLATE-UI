@@ -83,7 +83,7 @@ const Header = (props) => {
 
     return (<>
        <Modald visible={isOpen} onClose={() => setIsOpen(false)}>
-        <FolowStepsd viewhistory={dis}  />
+        <FolowStepsd viewhistory={dis} data={"myAlgo wallet connected! "} />
       </Modald>
         <div className="header bg-site-secondary ">
             <Container fluid className="px-md-5">
