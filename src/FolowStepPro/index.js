@@ -2,10 +2,11 @@ import React from "react";
 import cn from "classnames";
 import styles from "./FolowSteps.module.sass";
 //import Icon from "../../../components/Icon";
-//import Loader from "../../../components/Loader";
+import Loader from "../Loader";
 //import LoaderCircle from "../../../components/LoaderCircle";
 
-const FolowStepsd = ({ className,viewhistory,data}) => {
+const FolowStepPro = ({ className,onClose}) => {
+
   return (
     <div className={cn(className, styles.steps)}>
       {/* <h1>{test}</h1> */}
@@ -14,18 +15,23 @@ const FolowStepsd = ({ className,viewhistory,data}) => {
 
       <div className={cn(styles.item, styles.done)}>
           <div className={styles.head}>
-            <div className={styles.icon}>
-              {/* <Icon name="upload-file" size="24" /> */}
-            </div>
-            <h5>{data}</h5>
+            {/* <div className={styles.icon}>
+              <Icon name="upload-file" size="24" />
+            </div> */}
             <div className={styles.details}>
-              <div className={styles.info}>{viewhistory}</div>
+          
+              <div className={styles.info}>Please Wait..... </div>
+              <div className={styles.saving}>                  
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <Loader className={styles.loader} />
+              </div>          
+              
             </div>
           </div>
-          {/* <button type="submit" className={cn("button-small", styles.button)} onClick={onClo()}>Done</button> */}
-          <center><button type="submit" className={cn("button-small", styles.title)} onClick={()=>window.location.reload()}>ok</button></center>
+          
         </div>
 
+        
         
             
           
@@ -34,4 +40,4 @@ const FolowStepsd = ({ className,viewhistory,data}) => {
   );
 };
 
-export default FolowStepsd;
+export default FolowStepPro;
