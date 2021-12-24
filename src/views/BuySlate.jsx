@@ -51,7 +51,7 @@ const Buyslate = () => {
     const[balance,setBalance] = useState([]);
     const[stakedbalance,setStakedBalance] = useState([]);
     const[rewardamountbalance,setrewardBalance] = useState([]);
-    let assetid = 45655095;
+    let assetid = 53453651;
     let applicationid = 46315128;
 
     let address=localStorage.getItem("wallet");
@@ -67,21 +67,21 @@ const Buyslate = () => {
   // console.log("val",val)
   console.log("accinfolocal",accountInfoResponse);
   if( accountInfoResponse['apps-local-state'].length === null|| accountInfoResponse['apps-local-state'].length ===undefined||accountInfoResponse['apps-local-state'].length===""){
-    alert("check");
+    alert("checknew");
  }
 else{
 
 
-  console.log("User",accountInfoResponse['apps-local-state'].length);
+  console.log("Userres",accountInfoResponse['apps-local-state'].length);
   for (let i = 0; i < accountInfoResponse['apps-local-state'].length; i++) { 
       if (accountInfoResponse['apps-local-state'][i].id == applicationid) {
           console.log("User's local state:",accountInfoResponse['apps-local-state'][i].id);
           let acccheck= accountInfoResponse['apps-local-state'][i][`key-value`]; 
           console.log("Usercheck",acccheck);
-          console.log("User",accountInfoResponse['apps-local-state'][i][`key-value`]);
+          console.log("Usernewres",accountInfoResponse['apps-local-state'][i][`key-value`]);
         
           if(accountInfoResponse['apps-local-state'][i][`key-value`]=== null|| accountInfoResponse['apps-local-state'][i][`key-value`] === undefined||accountInfoResponse['apps-local-state'][i][`key-value`]===""){
-            alert("check");
+            alert("new");
          }
         else{
 for (let n = 0; n < accountInfoResponse['apps-local-state'][i][`key-value`].length; n++) {
@@ -176,7 +176,7 @@ const params = await algodclient.getTransactionParams().do();
 const assetoptin1 = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
   from: localStorage.getItem('wallet'),
   to: localStorage.getItem('wallet'),
-  assetIndex: 45655095,
+  assetIndex: 53453651,
   note: undefined,
   amount: 0,
   suggestedParams: params
@@ -301,7 +301,7 @@ console.log("logic",sender1)
       to: receiver,
       amount: unstakeamount,
       note: undefined,
-      assetIndex: 45655095,
+      assetIndex: 53453651,
       suggestedParams: params});
 
      
@@ -477,7 +477,7 @@ console.log("logic",sender1)
       to: receiver,
       amount: parseInt(rewardamountbalance/100000000000),
       note: undefined,
-      assetIndex: 45655095,
+      assetIndex: 53453651,
       suggestedParams: params});
     let transaction5 =algosdk.makePaymentTxnWithSuggestedParamsFromObject({
       from: sender,

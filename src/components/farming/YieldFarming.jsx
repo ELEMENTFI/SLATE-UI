@@ -27,14 +27,20 @@ const YieldFarming = ()  => {
  
  
   const[totalstake,setTotalStake]=useState("");
+  const[prices1,setS1]=useState("");
+  const[prices2,setS2]=useState("");
+  const[price,setprice]=useState("");
   
   const[totalreward,setTotalreward]=useState("");
+  const[totalrewardallocated,setTotalrewardallocated]=useState("");
+  
+
     useEffect(() => {
       const fetchPosts = async () => {
      
-    let applicationid = 46315128;
+    let applicationid = 53433787;
     const client = new algosdk.Algodv2('', 'https://api.testnet.algoexplorer.io', '');
-    let accountInfoResponse1 = await client.accountInformation("J2BO4CWHCK4LVUZWUQH7BFNK7TMWQLPNN5TW4LIXSECJ6IY3MKDRBE7QLA").do();
+    let accountInfoResponse1 = await client.accountInformation("MX4W5I4UMDT5B76BMP4DS63Z357WDMNHDICPNEKPG4HVPZJTS2G53DDVBY").do();
   
   for (let i = 0; i < accountInfoResponse1['created-apps'].length; i++) { 
      console.log("Application's global state:");
@@ -45,12 +51,16 @@ const YieldFarming = ()  => {
             let enc = accountInfoResponse1['created-apps'][i]['params']['global-state'][n];
             console.log("encode",enc);
             var decodedString = window.atob(enc.key);
-            if(enc['key'] === "Z2E="){
+            if(enc['key'] === "R0E="){
               setTotalStake( accountInfoResponse1['created-apps'][i]['params']['global-state'][n]['value']['uint']);
               console.log("checktvl", accountInfoResponse1['created-apps'][i]['params']['global-state'][n]['value']['uint'])
             }
-            if(enc['key'] === "Z3Nz"){
+            if(enc['key'] === "VFNVTEM="){
               setTotalreward( accountInfoResponse1['created-apps'][i]['params']['global-state'][n]['value']['uint']);
+              console.log("checktvl", accountInfoResponse1['created-apps'][i]['params']['global-state'][n]['value']['uint'])
+            }
+            if(enc['key'] === "VFNM"){
+              setTotalrewardallocated( accountInfoResponse1['created-apps'][i]['params']['global-state'][n]['value']['uint']);
               console.log("checktvl", accountInfoResponse1['created-apps'][i]['params']['global-state'][n]['value']['uint'])
             }
         }
@@ -65,8 +75,69 @@ const YieldFarming = ()  => {
     }, []);
 
 
+//for price
+    useEffect(() => {
+      const fetchPosts = async () => {
+        let slpricenew;
+        let s2pricenew;
+    let applicationid1 = 21580889;
+    const client = new algosdk.Algodv2('', 'https://api.testnet.algoexplorer.io', '');
+    //let accountInfoResponse1 = await client.accountInformation("MX4W5I4UMDT5B76BMP4DS63Z357WDMNHDICPNEKPG4HVPZJTS2G53DDVBY").do();
+    let accountInfoResponse2 = await client.accountInformation("BQFJKVQCHQPYQLG7PDZF5V7DAQTOHFG2BTJQD62ZG5MFNL3OFNXIYGIKKI").do();
+    console.log("accinfolocalprice",accountInfoResponse2);
+    if( accountInfoResponse2['apps-local-state'].length === null|| accountInfoResponse2['apps-local-state'].length ===undefined||accountInfoResponse2['apps-local-state'].length===""){
+      alert("checkprice");
+   }else{
+    console.log("priceconsole",accountInfoResponse2['apps-local-state'].length);
+    for (let i = 0; i < accountInfoResponse2['apps-local-state'].length; i++) { 
+      if (accountInfoResponse2['apps-local-state'][i].id == applicationid1) {
+          console.log("User's local stateprice:",accountInfoResponse2['apps-local-state'][i].id);
+          let acccheck= accountInfoResponse2['apps-local-state'][i][`key-value`]; 
+          console.log("Usercheckfor price",acccheck);
+          console.log("Userforprice",accountInfoResponse2['apps-local-state'][i][`key-value`]);
+        
+          if(accountInfoResponse2['apps-local-state'][i][`key-value`]=== null|| accountInfoResponse2['apps-local-state'][i][`key-value`] === undefined||accountInfoResponse2['apps-local-state'][i][`key-value`]===""){
+            alert("check");
+         }
+        else{
+for (let n = 0; n < accountInfoResponse2['apps-local-state'][i][`key-value`].length; n++) {
+              console.log(accountInfoResponse2['apps-local-state'][i][`key-value`][n]);
+              //setStakedBalance(accountInfoResponse['apps-local-state'][i][`key-value`][n]);
+              
+              let rewardkey =accountInfoResponse2['apps-local-state'][i]['key-value'][n];
+             if(rewardkey['key'] === "czE="){
+              slpricenew=accountInfoResponse2['apps-local-state'][i]['key-value'][n]['value']['uint'];
+              console.log("s1pricenew",accountInfoResponse2['apps-local-state'][i]['key-value'][n]['value']['uint']);
+               setS1(accountInfoResponse2['apps-local-state'][i]['key-value'][n]['value']['uint']);
+             }
+            if(rewardkey['key'] === "czI="){
+              s2pricenew=accountInfoResponse2['apps-local-state'][i]['key-value'][n]['value']['uint'];
+              console.log("s2pricenew",accountInfoResponse2['apps-local-state'][i]['key-value'][n]['value']['uint']);
+              setS2(accountInfoResponse2['apps-local-state'][i]['key-value'][n]['value']['uint']);
+            
+            }
+            
+              
+          }
+
+        }
+
+          
+      }
+  }
 
 
+   }
+   let pricecal;
+   pricecal=parseInt((slpricenew)/(s2pricenew));
+   console.log("pricecalculated",pricecal);
+   setprice(pricecal);
+      
+      };
+      
+  
+      fetchPosts();
+    }, []);
 
 
 
@@ -107,7 +178,10 @@ const YieldFarming = ()  => {
           <CustomCard title="TOTAL VALUE LOCKED" text={parseInt(totalstake/1000000)}  subText="SLATE" />
         </Col>
         <Col xl="4" lg="8" xs="12" className="mb-4">
-          <CustomCard title="SLATE REWARDS" text={parseInt(totalreward/1000000)} subText="out of 3,000,000" />
+          <CustomCard title="SLATE REWARDS" text={parseInt(totalreward/1000000)} subText={parseInt(totalrewardallocated/1000000)} />
+        </Col>
+        <Col xl="4" lg="8" xs="12" className="mb-4">
+          <CustomCard title="SLATE PRICE" text={price}  />
         </Col>
         {/* <Col xl="4" lg="8" xs="12" className="mb-4">
           <CustomCard title="SLATE PRICE" text={0} subText="Uniswap market" />
