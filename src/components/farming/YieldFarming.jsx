@@ -18,14 +18,12 @@ import Pools from "./Pools";
 
 
 //import blackoracle from "../../views/blackOracleAbi";
+import configfile from "../../config.json";
 
-import web3 from "../../web3";
 const algosdk = require('algosdk');
 const algodClient = new algosdk.Algodv2('', 'https://api.testnet.algoexplorer.io', '');
 const myAlgoConnect = new MyAlgoConnect();
 const YieldFarming = ()  => {
- 
- 
   const[totalstake,setTotalStake]=useState("");
   const[prices1,setS1]=useState("");
   const[prices2,setS2]=useState("");
@@ -38,13 +36,13 @@ const YieldFarming = ()  => {
     useEffect(() => {
       const fetchPosts = async () => {
      
-    let applicationid = 53433787;
+    //let applicationid = 53433787;
     const client = new algosdk.Algodv2('', 'https://api.testnet.algoexplorer.io', '');
-    let accountInfoResponse1 = await client.accountInformation("MX4W5I4UMDT5B76BMP4DS63Z357WDMNHDICPNEKPG4HVPZJTS2G53DDVBY").do();
+    let accountInfoResponse1 = await client.accountInformation(configfile.creatoraddress).do();
   
   for (let i = 0; i < accountInfoResponse1['created-apps'].length; i++) { 
      console.log("Application's global state:");
-    if (accountInfoResponse1['created-apps'][i].id == applicationid) {
+    if (accountInfoResponse1['created-apps'][i].id == parseInt(configfile.applicationid)) {
         console.log("Application's global state:");
         for (let n = 0; n < accountInfoResponse1['created-apps'][i]['params']['global-state'].length; n++) {
             console.log(accountInfoResponse1['created-apps'][i]['params']['global-state'][n]);
@@ -80,17 +78,17 @@ const YieldFarming = ()  => {
       const fetchPosts = async () => {
         let slpricenew;
         let s2pricenew;
-    let applicationid1 = 21580889;
+    let priceappid = 21580889;
     const client = new algosdk.Algodv2('', 'https://api.testnet.algoexplorer.io', '');
     //let accountInfoResponse1 = await client.accountInformation("MX4W5I4UMDT5B76BMP4DS63Z357WDMNHDICPNEKPG4HVPZJTS2G53DDVBY").do();
-    let accountInfoResponse2 = await client.accountInformation("BQFJKVQCHQPYQLG7PDZF5V7DAQTOHFG2BTJQD62ZG5MFNL3OFNXIYGIKKI").do();
+    let accountInfoResponse2 = await client.accountInformation(configfile.pairescrowaddress).do();
     console.log("accinfolocalprice",accountInfoResponse2);
     if( accountInfoResponse2['apps-local-state'].length === null|| accountInfoResponse2['apps-local-state'].length ===undefined||accountInfoResponse2['apps-local-state'].length===""){
       alert("checkprice");
    }else{
     console.log("priceconsole",accountInfoResponse2['apps-local-state'].length);
     for (let i = 0; i < accountInfoResponse2['apps-local-state'].length; i++) { 
-      if (accountInfoResponse2['apps-local-state'][i].id == applicationid1) {
+      if (accountInfoResponse2['apps-local-state'][i].id == parseInt(configfile.priceappid)) {
           console.log("User's local stateprice:",accountInfoResponse2['apps-local-state'][i].id);
           let acccheck= accountInfoResponse2['apps-local-state'][i][`key-value`]; 
           console.log("Usercheckfor price",acccheck);

@@ -13,6 +13,7 @@ import FolowStepPro from '../FolowStepPro';
 import ModalDCopy from '../ModalDCopy';
 import BigNumber from "bignumber.js";
 import FolowStepsdcopy from "../FolowStepsdcopy";
+import configfile from "../config.json";
 const algosdk = require('algosdk');
 const algodClient = new algosdk.Algodv2('', 'https://api.testnet.algoexplorer.io', '');
 const myAlgoConnect = new MyAlgoConnect();
@@ -57,7 +58,7 @@ const[datasendhere,datasethere] = useState("");
     const[balance,setBalance] = useState([]);
     const[stakedbalance,setStakedBalance] = useState([]);
     const[rewardamountbalance,setrewardBalance] = useState([]);
-    let assetid = 53453651;
+    //let assetid = 53453651;
     let applicationid = 46315128;
 
     let address=localStorage.getItem("wallet");
@@ -80,7 +81,7 @@ else{
 
   console.log("Userres",accountInfoResponse['apps-local-state'].length);
   for (let i = 0; i < accountInfoResponse['apps-local-state'].length; i++) { 
-      if (accountInfoResponse['apps-local-state'][i].id == applicationid) {
+      if (accountInfoResponse['apps-local-state'][i].id == parseInt(configfile.applicationid)) {
           console.log("User's local state:",accountInfoResponse['apps-local-state'][i].id);
           let acccheck= accountInfoResponse['apps-local-state'][i][`key-value`]; 
           console.log("Usercheck",acccheck);
@@ -115,7 +116,7 @@ for (let n = 0; n < accountInfoResponse['apps-local-state'][i][`key-value`].leng
 }
   for(let i = 0; i < accountInfoResponse['assets'].length; i++){
     console.log("accountsasset", accountInfoResponse['assets']);
-     if (accountInfoResponse['assets'][i]['asset-id'] == assetid) {
+     if (accountInfoResponse['assets'][i]['asset-id'] == parseInt(configfile.assetid)) {
       setBalance(accountInfoResponse['assets'][i]['amount']);
       console.log("accountsassetnew", accountInfoResponse['assets'][i]['amount']);
 
@@ -319,7 +320,7 @@ console.log("logic",sender1)
       to: receiver,
       amount: unstakeamount,
       note: undefined,
-      assetIndex: 53453651,
+      assetIndex: parseInt(configfile.assetid),
       suggestedParams: params});
 
      
@@ -358,186 +359,186 @@ catch (err) {
 }
 
 }
-const Claimreward = async() => {
+// const Claimreward = async() => {
 
-  const algodClient = new algosdk.Algodv2('', 'https://api.testnet.algoexplorer.io', '');
+//   const algodClient = new algosdk.Algodv2('', 'https://api.testnet.algoexplorer.io', '');
 
 
-  let appId1 = 46315308;
-  let appId2 = 46315128;
+//   let appId1 = 46315308;
+//   let appId2 = 46315128;
   
-  global.TextEncoder = require("util").TextEncoder; 
-  // const algosdk = require('algosdk');
+//   global.TextEncoder = require("util").TextEncoder; 
+//   // const algosdk = require('algosdk');
 
-  const waitForConfirmation = async function (algodclient, txId) {
-    let status = (await algodclient.status().do());
-    let lastRound = status["last-round"];
-      while (true) {
-        const pendingInfo = await algodclient.pendingTransactionInformation(txId).do();
-        if (pendingInfo["confirmed-round"] !== null && pendingInfo["confirmed-round"] > 0) {
-          //Got the completed Transaction
-          console.log("Transaction " + txId + " confirmed in round " + pendingInfo["confirmed-round"]);
-          break;
-        }
-        lastRound++;
-        await algodclient.statusAfterBlock(lastRound).do();
-      }
-    };
+//   const waitForConfirmation = async function (algodclient, txId) {
+//     let status = (await algodclient.status().do());
+//     let lastRound = status["last-round"];
+//       while (true) {
+//         const pendingInfo = await algodclient.pendingTransactionInformation(txId).do();
+//         if (pendingInfo["confirmed-round"] !== null && pendingInfo["confirmed-round"] > 0) {
+//           //Got the completed Transaction
+//           console.log("Transaction " + txId + " confirmed in round " + pendingInfo["confirmed-round"]);
+//           break;
+//         }
+//         lastRound++;
+//         await algodclient.statusAfterBlock(lastRound).do();
+//       }
+//     };
 
-  try {
-    const addresses = await myAlgoConnect.connect();
-    console.log("Address =", addresses);
-      var escrowdata = `#pragma version 4
+//   try {
+//     const addresses = await myAlgoConnect.connect();
+//     console.log("Address =", addresses);
+//       var escrowdata = `#pragma version 4
 
-  global GroupSize // size=6
-  int 2
-  >=
-  global GroupSize // size=6
-  int 6
-  <=
-  &&
-  bz label1
-  gtxn 0 ApplicationID // id=233725848
-  int 46315308
-  ==
-  bnz label2
-  b label1
-  label2:
-  gtxn 0 TypeEnum
-  int 6 // ApplicationCall
-  ==
-  gtxn 0 OnCompletion
-  int 0 // NoOp
-  ==
-  int 0
-  gtxn 0 OnCompletion
-  ==
-  ||
-  &&
-  gtxn 1 RekeyTo // AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ
-  global ZeroAddress
-  ==
-  &&
-  gtxn 0 RekeyTo // AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ
-  global ZeroAddress
-  ==
-  &&
-  bnz label3
-  label1:
-  int 0
-  return
-  label3:
-  int 1
-  return
+//   global GroupSize // size=6
+//   int 2
+//   >=
+//   global GroupSize // size=6
+//   int 6
+//   <=
+//   &&
+//   bz label1
+//   gtxn 0 ApplicationID // id=233725848
+//   int 46315308
+//   ==
+//   bnz label2
+//   b label1
+//   label2:
+//   gtxn 0 TypeEnum
+//   int 6 // ApplicationCall
+//   ==
+//   gtxn 0 OnCompletion
+//   int 0 // NoOp
+//   ==
+//   int 0
+//   gtxn 0 OnCompletion
+//   ==
+//   ||
+//   &&
+//   gtxn 1 RekeyTo // AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ
+//   global ZeroAddress
+//   ==
+//   &&
+//   gtxn 0 RekeyTo // AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ
+//   global ZeroAddress
+//   ==
+//   &&
+//   bnz label3
+//   label1:
+//   int 0
+//   return
+//   label3:
+//   int 1
+//   return
   
-  `;
+//   `;
     
-  // define sender
-  let sender = addresses[0].address;
-  let client = new algosdk.Algodv2(algodToken, algodServer, algodPort);
+//   // define sender
+//   let sender = addresses[0].address;
+//   let client = new algosdk.Algodv2(algodToken, algodServer, algodPort);
 
- // get node suggested parameters
-  let params = await client.getTransactionParams().do();
-  // comment out the next two lines to use suggested fee
-  params.fee = 1000;
-  params.flatFee = true;
-  let appArgs1= [];
+//  // get node suggested parameters
+//   let params = await client.getTransactionParams().do();
+//   // comment out the next two lines to use suggested fee
+//   params.fee = 1000;
+//   params.flatFee = true;
+//   let appArgs1= [];
   
-  appArgs1.push(new Uint8Array(Buffer.from("always")));
-  console.log("(line:516) appArgs = ",appArgs1)
+//   appArgs1.push(new Uint8Array(Buffer.from("always")));
+//   console.log("(line:516) appArgs = ",appArgs1)
 
-  // create unsigned transaction
-  let transaction1 = algosdk.makeApplicationNoOpTxnFromObject({
-    from: sender, 
-    suggestedParams: params, 
-    appIndex: appId1, 
-    appArgs: appArgs1});
-  //  let txId1 = transaction1.txID().toString();
+//   // create unsigned transaction
+//   let transaction1 = algosdk.makeApplicationNoOpTxnFromObject({
+//     from: sender, 
+//     suggestedParams: params, 
+//     appIndex: appId1, 
+//     appArgs: appArgs1});
+//   //  let txId1 = transaction1.txID().toString();
 
-  let appArgs2= [];
+//   let appArgs2= [];
   
-  appArgs2.push(new Uint8Array(Buffer.from("11")));
-  console.log("(line:516) appArgs = ",appArgs2)
+//   appArgs2.push(new Uint8Array(Buffer.from("11")));
+//   console.log("(line:516) appArgs = ",appArgs2)
 
-  // create unsigned transaction
-  let transaction2 = algosdk.makeApplicationNoOpTxnFromObject({
-    from: sender, 
-    suggestedParams: params, 
-    appIndex: appId2, 
-    appArgs: appArgs2})
+//   // create unsigned transaction
+//   let transaction2 = algosdk.makeApplicationNoOpTxnFromObject({
+//     from: sender, 
+//     suggestedParams: params, 
+//     appIndex: appId2, 
+//     appArgs: appArgs2})
  
 
 
 
- let appArgs3= [];
+//  let appArgs3= [];
   
-  appArgs2.push(new Uint8Array(Buffer.from("12")));
-  console.log("(line:516) appArgs = ",appArgs3)
+//   appArgs2.push(new Uint8Array(Buffer.from("12")));
+//   console.log("(line:516) appArgs = ",appArgs3)
 
-  // create unsigned transaction
-  let transaction3 = algosdk.makeApplicationNoOpTxnFromObject({
-    from: sender, 
-    suggestedParams: params, 
-    appIndex: appId2, 
-    appArgs: appArgs3})
-  //  let txId1 = transaction1.txID().toString();
+//   // create unsigned transaction
+//   let transaction3 = algosdk.makeApplicationNoOpTxnFromObject({
+//     from: sender, 
+//     suggestedParams: params, 
+//     appIndex: appId2, 
+//     appArgs: appArgs3})
+//   //  let txId1 = transaction1.txID().toString();
 
-  let results = await client.compile(escrowdata).do();
-  console.log("Hash = " + results.hash);
-  console.log("Result = " + results.result);
-  let program = new Uint8Array(Buffer.from(results.result, "base64"));
+//   let results = await client.compile(escrowdata).do();
+//   console.log("Hash = " + results.hash);
+//   console.log("Result = " + results.result);
+//   let program = new Uint8Array(Buffer.from(results.result, "base64"));
  
 
-let lsig = algosdk.makeLogicSig(program);
+// let lsig = algosdk.makeLogicSig(program);
     
 
-let sender1 = lsig.address();
-console.log("logic",sender1)
-    let receiver = sender;
-    // let receiver = "<receiver-address>"";
+// let sender1 = lsig.address();
+// console.log("logic",sender1)
+//     let receiver = sender;
+//     // let receiver = "<receiver-address>"";
     
-   // let closeToRemaninder = sender;
-    let note = undefined;
-    let transaction4 =algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
-      from: sender1,
-      to: receiver,
-      amount: parseInt(rewardamountbalance/100000000000),
-      note: undefined,
-      assetIndex: 53453651,
-      suggestedParams: params});
-    let transaction5 =algosdk.makePaymentTxnWithSuggestedParamsFromObject({
-      from: sender,
-      to: sender1,
-      amount: 2000,
-      note: undefined,
-      suggestedParams: params});
-    //let txns = [transaction1, transaction2,transaction3,transaction4];
+//    // let closeToRemaninder = sender;
+//     let note = undefined;
+//     let transaction4 =algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+//       from: sender1,
+//       to: receiver,
+//       amount: parseInt(rewardamountbalance/100000000000),
+//       note: undefined,
+//       assetIndex: 53453651,
+//       suggestedParams: params});
+//     let transaction5 =algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+//       from: sender,
+//       to: sender1,
+//       amount: 2000,
+//       note: undefined,
+//       suggestedParams: params});
+//     //let txns = [transaction1, transaction2,transaction3,transaction4];
 
-//myAlgo start
+// //myAlgo start
 
-const groupID = algosdk.computeGroupID([ transaction1, transaction2, transaction3, transaction4,transaction5]);
-      const txs = [ transaction1, transaction2, transaction3, transaction4,transaction5];
-      txs[0].group = groupID;
-      txs[1].group = groupID;
-      txs[2].group = groupID;
-      txs[3].group = groupID;
-	    txs[4].group = groupID;
+// const groupID = algosdk.computeGroupID([ transaction1, transaction2, transaction3, transaction4,transaction5]);
+//       const txs = [ transaction1, transaction2, transaction3, transaction4,transaction5];
+//       txs[0].group = groupID;
+//       txs[1].group = groupID;
+//       txs[2].group = groupID;
+//       txs[3].group = groupID;
+// 	    txs[4].group = groupID;
       
-      const signedTx1 = await myAlgoConnect.signTransaction(txs[0].toByte());
-      const signedTx2 = await myAlgoConnect.signTransaction(txs[1].toByte());
-	  const signedTx3 = await myAlgoConnect.signTransaction(txs[2].toByte());
-      const signedTx4 = algosdk.signLogicSigTransaction(txs[3], lsig);
-      const signedTx5 = await myAlgoConnect.signTransaction(txs[4].toByte());
-  const response = await algodClient.sendRawTransaction([ signedTx1.blob, signedTx2.blob, signedTx3.blob, signedTx4.blob,signedTx5.blob]).do();
-  console.log("TxID", JSON.stringify(response, null, 1));
-  await waitForConfirmation(algodClient, response.txId);
-  alert(" Reward Claimed Successfully");
-}
-catch (err) {
-    console.error(err);
-}
+//       const signedTx1 = await myAlgoConnect.signTransaction(txs[0].toByte());
+//       const signedTx2 = await myAlgoConnect.signTransaction(txs[1].toByte());
+// 	  const signedTx3 = await myAlgoConnect.signTransaction(txs[2].toByte());
+//       const signedTx4 = algosdk.signLogicSigTransaction(txs[3], lsig);
+//       const signedTx5 = await myAlgoConnect.signTransaction(txs[4].toByte());
+//   const response = await algodClient.sendRawTransaction([ signedTx1.blob, signedTx2.blob, signedTx3.blob, signedTx4.blob,signedTx5.blob]).do();
+//   console.log("TxID", JSON.stringify(response, null, 1));
+//   await waitForConfirmation(algodClient, response.txId);
+//   alert(" Reward Claimed Successfully");
+// }
+// catch (err) {
+//     console.error(err);
+// }
 
-}  
+// }  
 
     return (
         <section className="p-0 my-5">
