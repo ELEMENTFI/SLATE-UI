@@ -6,6 +6,7 @@ import icon1 from "../../assets/img/icon1.PNG";
 import { Link,useHistory } from "react-router-dom";
 import moment from 'moment';
 import MyAlgoConnect from '@randlabs/myalgo-connect';
+import configfile from "../../config.json";
 const algosdk = require('algosdk');
 const algodClient = new algosdk.Algodv2('', 'https://api.testnet.algoexplorer.io', '');
 const myAlgoConnect = new MyAlgoConnect();
@@ -18,8 +19,8 @@ const Pools = () => {
     const[totallock,setTotallock]=useState("");
     const[totalclaimed,setTotalclaim]=useState("");
     const[rewardleft,setRewardleft]=useState("");
-    let assetid = 53453651;
-    let applicationid = 53433787;
+    //let assetid = 53453651;
+    //let applicationid = 53433787;
 
     let address=localStorage.getItem("wallet");
     const client = new algosdk.Algodv2('', 'https://api.testnet.algoexplorer.io', '');
@@ -27,13 +28,13 @@ const Pools = () => {
     useEffect(() => {
         const fetchPosts = async () => {
        
-      let applicationid = 53433787;
+      //let applicationid = 53433787;
       const client = new algosdk.Algodv2('', 'https://api.testnet.algoexplorer.io', '');
-      let accountInfoResponse1 = await client.accountInformation("MX4W5I4UMDT5B76BMP4DS63Z357WDMNHDICPNEKPG4HVPZJTS2G53DDVBY").do();
+      let accountInfoResponse1 = await client.accountInformation(configfile.creatoraddress).do();
     
     for (let i = 0; i < accountInfoResponse1['created-apps'].length; i++) { 
        console.log("Application's global state:");
-      if (accountInfoResponse1['created-apps'][i].id == applicationid) {
+      if (accountInfoResponse1['created-apps'][i].id == parseInt(configfile.applicationid)) {
           console.log("Application's global state:");
           for (let n = 0; n < accountInfoResponse1['created-apps'][i]['params']['global-state'].length; n++) {
               console.log(accountInfoResponse1['created-apps'][i]['params']['global-state'][n]);
@@ -69,11 +70,9 @@ const Pools = () => {
         alert("check");
      }
     else{
-    
-    
       console.log("User",accountInfoResponse['apps-local-state'].length);
       for (let i = 0; i < accountInfoResponse['apps-local-state'].length; i++) { 
-          if (accountInfoResponse['apps-local-state'][i].id == applicationid) {
+          if (accountInfoResponse['apps-local-state'][i].id == parseInt(configfile.applicationid)) {
               console.log("User's local state:",accountInfoResponse['apps-local-state'][i].id);
               let acccheck= accountInfoResponse['apps-local-state'][i][`key-value`]; 
               console.log("Usercheck",acccheck);
@@ -116,7 +115,7 @@ const Pools = () => {
       useEffect(() => {
         const fetchPosts = async () => {
             
-  let appById = await algodClient.getApplicationByID(applicationid).do();
+  let appById = await algodClient.getApplicationByID(parseInt(configfile.applicationid)).do();
   console.log("globalappid",appById);
  
     console.log("Application's global state:");
@@ -309,7 +308,7 @@ const stakepools = async() => {
                   src={icon}
                   alt="Card image cap"
               />
-               {rewardleft}
+               {parseFloat(rewardleft)/1000000}
           </p>
       </div>
   </div>
@@ -339,7 +338,7 @@ const stakepools = async() => {
                   src={icon}
                   alt="Card image cap"
               />
-             {}
+             {parseInt(totalstake/1000000)}
           </p>
       </div>
   </div>

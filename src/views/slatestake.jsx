@@ -12,10 +12,12 @@ import FolowStepPro from '../FolowStepPro';
 import ModalDCopy from '../ModalDCopy';
 import BigNumber from "bignumber.js";
 import FolowStepsdcopy from "../FolowStepsdcopy";
+import configfile from "../config.json";
 const algosdk = require('algosdk');
 const algodClient = new algosdk.Algodv2('', 'https://api.testnet.algoexplorer.io', '');
 const myAlgoConnect = new MyAlgoConnect();
 const Slatestake = () => {
+  console.log("configfile",configfile);
     let [activeTab, setActiveTab] = useState("Deposit");
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [dropdownOpen1, setDropdownOpen1] = useState(false);
@@ -79,8 +81,8 @@ const Slatestake = () => {
     const[usertime,setusertime] = useState('');
     const[rewardcalc,setrewardcalculation]=useState('');
     
-    let assetid = 53453651;
-    let applicationid = 53433787;
+    //let assetid = 53453651;
+    //let applicationid = 53433787;
 
     let address=localStorage.getItem("wallet");
 
@@ -94,7 +96,7 @@ const Slatestake = () => {
   // let val = await client.ApplicationInformation(appId);
   // console.log("val",val)
 
-  let appById = await algodClient.getApplicationByID(applicationid).do();
+  let appById = await algodClient.getApplicationByID(parseInt(configfile.applicationid)).do();
   console.log("globalappid",appById);
  
     console.log("Application's global state:");
@@ -161,7 +163,7 @@ else{
 
   console.log("User",accountInfoResponse['apps-local-state'].length);
   for (let i = 0; i < accountInfoResponse['apps-local-state'].length; i++) { 
-      if (accountInfoResponse['apps-local-state'][i].id == applicationid) {
+      if (accountInfoResponse['apps-local-state'][i].id == parseInt(configfile.applicationid)) {
           console.log("User's local state:",accountInfoResponse['apps-local-state'][i].id);
           let acccheck= accountInfoResponse['apps-local-state'][i][`key-value`]; 
           console.log("Usercheck",acccheck);
@@ -203,7 +205,7 @@ for (let n = 0; n < accountInfoResponse['apps-local-state'][i][`key-value`].leng
 }
   for(let i = 0; i < accountInfoResponse['assets'].length; i++){
     console.log("accountsasset", accountInfoResponse['assets']);
-     if (accountInfoResponse['assets'][i]['asset-id'] == assetid) {
+     if (accountInfoResponse['assets'][i]['asset-id'] == parseInt(configfile.assetid)) {
       setBalance(accountInfoResponse['assets'][i]['amount']);
       console.log("accountsassetnew", accountInfoResponse['assets'][i]['amount']);
 
@@ -376,8 +378,8 @@ const optin=async(assetID,responsetxId,addresseswall)=>{
   const algosdk = require('algosdk');
   const algodclient = new algosdk.Algodv2('', 'https://api.testnet.algoexplorer.io/', '');
   const myAlgoConnect = new MyAlgoConnect();
-  let appId1 = 46315308;
-  let appId2 = 53433787;
+  //let appId1 = 46315308;
+  //let applicationid = 53433787;
   try {
     //const accounts = await myAlgoWallet.connect();
     //const addresses = accounts.map(account => account.address);
@@ -394,7 +396,7 @@ const optin=async(assetID,responsetxId,addresseswall)=>{
 
   let transoptin2 = algosdk.makeApplicationOptInTxnFromObject({
       from: localStorage.getItem('wallet'),
-      appIndex:parseInt(appId2),
+      appIndex:parseInt(configfile.applicationid),
       note: undefined,
       suggestedParams: params
       });
@@ -516,9 +518,9 @@ catch (err) {
 //       // create new application
 //       //let appId = await createApp(algodClient, creatorAccount, approvalProgram, clearProgram, localInts, localBytes, globalInts, globalBytes);
 //       let appId1 = 46315308;
-//       let appId2 = 53433787               ;
+//       let configfile.applicationid = 53433787               ;
 //       // opt-in to application
-//       await optInApp(algodClient, account, appId1,appId2);
+//       await optInApp(algodClient, account, appId1,configfile.applicationid);
      
 //       }
 //       catch (err){
@@ -538,7 +540,7 @@ const params = await algodclient.getTransactionParams().do();
 const assetoptin1 = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
   from: localStorage.getItem('wallet'),
   to: localStorage.getItem('wallet'),
-  assetIndex: 53453651,
+  assetIndex: parseInt(configfile.assetid),
   note: undefined,
   amount: 0,
   suggestedParams: params
@@ -637,9 +639,9 @@ const stake = async() => {
  
    setaccount(localStorage.getItem("wallet"));
    let sender = localStorage.getItem("wallet");
-   let assetid = 53453651;
-   let appId1 = 46315308;
-   let appId2 = 53433787;               ;
+   //let assetid = 53453651;
+   //let appId1 = 46315308;
+   //let applicationid = 53433787;               ;
    
    // helper function to await transaction confirmation
    // Function used to wait for a tx confirmation
@@ -683,7 +685,7 @@ const stake = async() => {
      let transaction1 = algosdk.makeApplicationNoOpTxnFromObject({
       from: sender, 
      suggestedParams: params, 
-     appIndex: appId2, 
+     appIndex: parseInt(configfile.applicationid), 
       appArgs: appArgs1});
      //  let txId1 = transaction1.txID().toString();
    
@@ -696,7 +698,7 @@ const stake = async() => {
      let transaction2 = algosdk.makeApplicationNoOpTxnFromObject({
       from: sender, 
      suggestedParams: params, 
-     appIndex: appId2, 
+     appIndex: parseInt(configfile.applicationid), 
       appArgs: appArgs2});
      // // Sign the transaction
      // let signedTxn = txn.signTxn(account.sk);
@@ -704,10 +706,10 @@ const stake = async() => {
    
    let transaction3 =algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
      from: sender,
-     to: "QGJQVEY5DFKXSHSEKOTRUXMRNNJTGEBDSNDKEKBGHRFBD6EEBNCZVT37TY",
+     to: configfile.escrowaddress,
      amount:stakeamount,
      note: undefined,
-     assetIndex: 53453651,
+     assetIndex: parseInt(configfile.assetid),
      suggestedParams: params});
    
     //  let transaction3 =algosdk.makePaymentTxnWithSuggestedParamsFromObject({
@@ -757,7 +759,7 @@ const unstake = async() => {
 
 
   let appId1 = 46315308;
-  let appId2 = 53433787;
+  //let applicationid = 53433787;
   var amt = document.getElementById("tid2").value; 
   let unstakeamount = parseInt(amt) * 1000000;
   global.TextEncoder = require("util").TextEncoder; 
@@ -781,7 +783,7 @@ const unstake = async() => {
   try {
     const addresses = await myAlgoConnect.connect();
     console.log("Address =", addresses);
-      var escrowdata = `#pragma version 4
+      var escrowdata1 = `#pragma version 4
 
       global GroupSize // size=6
       int 2
@@ -792,7 +794,7 @@ const unstake = async() => {
       &&
       bz label1
       gtxn 0 ApplicationID
-      int 53433787
+      int appid
       ==
       bnz label2
       b label1
@@ -822,14 +824,9 @@ const unstake = async() => {
       return
       label3:
       int 1
-      return
-      
-      
-      
-      
-  
+      return      
   `;
-    
+    var escrowdata=escrowdata1.replaceAll("appid",parseInt(configfile.applicationid));
   // define sender
   let sender = addresses[0].address;
   let client = new algosdk.Algodv2(algodToken, algodServer, algodPort);
@@ -848,7 +845,7 @@ const unstake = async() => {
   let transaction1 = algosdk.makeApplicationNoOpTxnFromObject({
     from: sender, 
     suggestedParams: params, 
-    appIndex: appId2, 
+    appIndex: parseInt(configfile.applicationid), 
     appArgs: appArgs1});
   //  let txId1 = transaction1.txID().toString();
 
@@ -861,7 +858,7 @@ const unstake = async() => {
   let transaction2 = algosdk.makeApplicationNoOpTxnFromObject({
     from: sender, 
     suggestedParams: params, 
-    appIndex: appId2, 
+    appIndex: parseInt(configfile.applicationid), 
     appArgs: appArgs2})
  
   //  let txId1 = transaction1.txID().toString();
@@ -887,7 +884,7 @@ console.log("logic",sender1)
       to: receiver,
       amount: unstakeamount,
       note: undefined,
-      assetIndex: 53453651,
+      assetIndex: parseInt(configfile.assetid),
       suggestedParams: params});
 
       // let transaction3 =algosdk.makePaymentTxnWithSuggestedParamsFromObject({
@@ -945,8 +942,8 @@ const Claimreward = async() => {
   const algodClient = new algosdk.Algodv2('', 'https://api.testnet.algoexplorer.io', '');
 
 
-  let appId1 = 46315308;
-  let appId2 = 53433787;
+ // let appId1 = 46315308;
+  //let applicationid = 53433787;
   
   global.TextEncoder = require("util").TextEncoder; 
   // const algosdk = require('algosdk');
@@ -969,7 +966,7 @@ const Claimreward = async() => {
   try {
     const addresses = await myAlgoConnect.connect();
     console.log("Address =", addresses);
-      var escrowdata = `#pragma version 4
+      var escrowdata1 = `#pragma version 4
 
       global GroupSize // size=6
       int 2
@@ -980,7 +977,7 @@ const Claimreward = async() => {
       &&
       bz label1
       gtxn 0 ApplicationID
-      int 53433787
+      int appid
       ==
       bnz label2
       b label1
@@ -1010,12 +1007,9 @@ const Claimreward = async() => {
       return
       label3:
       int 1
-      return
-      
-      
-      
+      return    
   `;
-    
+  var escrowdata=escrowdata1.replaceAll("appid",parseInt(configfile.applicationid));
   // define sender
   let sender = addresses[0].address;
   let client = new algosdk.Algodv2(algodToken, algodServer, algodPort);
@@ -1034,7 +1028,7 @@ const Claimreward = async() => {
   let transaction1 = algosdk.makeApplicationNoOpTxnFromObject({
     from: sender, 
     suggestedParams: params, 
-    appIndex: appId2, 
+    appIndex: parseInt(configfile.applicationid), 
     appArgs: appArgs1});
   //  let txId1 = transaction1.txID().toString();
 
@@ -1047,7 +1041,7 @@ const Claimreward = async() => {
   let transaction2 = algosdk.makeApplicationNoOpTxnFromObject({
     from: sender, 
     suggestedParams: params, 
-    appIndex: appId2, 
+    appIndex: parseInt(configfile.applicationid), 
     appArgs: appArgs2})
  
 
@@ -1062,7 +1056,7 @@ const Claimreward = async() => {
 //   let transaction3 = algosdk.makeApplicationNoOpTxnFromObject({
 //     from: sender, 
 //     suggestedParams: params, 
-//     appIndex: appId2, 
+//     appIndex: configfile.applicationid, 
 //     appArgs: appArgs3})
   //  let txId1 = transaction1.txID().toString();
 
@@ -1087,7 +1081,7 @@ console.log("logic",sender1)
       to: receiver,
       amount: parseFloat(rewardcalc)*1000000,
       note: undefined,
-      assetIndex: 53453651,
+      assetIndex: parseInt(configfile.assetid),
       suggestedParams: params});
     // let transaction5 =algosdk.makePaymentTxnWithSuggestedParamsFromObject({
     //   from: sender,
